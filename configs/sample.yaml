@@ -1,0 +1,7 @@
+defaults:
+  - data: yeast        # 切换物种改这里 → ecoli
+  - model: unet
+  - diffusion: default
+  - sample: yeast        # 切换物种改这里 → ecoli
+  - _self_
+ 

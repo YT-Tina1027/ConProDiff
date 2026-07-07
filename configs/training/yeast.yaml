@@ -1,0 +1,40 @@
+# ── 训练超参 ──────────────────────────────────────────────────
+distributed: false
+precision: "bf16"
+num_workers: 4
+pin_memory: true
+random_seed: 42
+
+batch_size: 64
+sample_batch_size: 20
+
+num_epochs: 300
+min_epochs: 50
+patience: 20
+log_step: 50
+sample_epoch: 20
+number_of_samples: 100
+
+# ── 评估 ─────────────────────────────────────────────────────
+eval_every_n_epochs: 10
+eval_num_samples_per_condition: 100
+cond_weight: 2.0
+use_wandb: false
+
+# ── Predictor 评估器（酵母菌） ────────────────────────────────
+use_predictor_eval: true
+predictor_eval_type: "yeast_oracle"
+
+yeast_python_bin: "/root/miniconda3/envs/oracle_tf114/bin/python"
+yeast_script_path: "/home/yt/Code/DNA-Diffusion/oracle/predict_generated_strength.py"
+yeast_model_conditions: "defined_media"
+
+# eval_bin_edges_pkl_path 指向 data.saved_data_path 同一个 pkl
+# 该 pkl 里的 bin_edges 字段保证评估分箱和训练完全一致
+eval_bin_edges_pkl_path: "/home/yt/Code/DNA-Diffusion/processed_data/yeast_diffusion_data_gclx.pkl"
+
+# 如果 pkl 里没有 bin_edges 字段（旧 pkl），改用手动阈值：
+# eval_low_max:  4.0
+# eval_mid_min:  4.0
+# eval_mid_max:  11.0
+# eval_high_min: 11.0

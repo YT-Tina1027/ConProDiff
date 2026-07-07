@@ -1,0 +1,35 @@
+# ── 训练超参 ──────────────────────────────────────────────────
+distributed: false
+precision: "bf16"
+num_workers: 4
+pin_memory: true
+random_seed: 42
+
+batch_size: 64
+sample_batch_size: 20
+
+num_epochs: 300
+min_epochs: 50
+patience: 20
+log_step: 50
+sample_epoch: 20
+number_of_samples: 100
+
+# ── 评估 ─────────────────────────────────────────────────────
+eval_every_n_epochs: 10
+eval_num_samples_per_condition: 100
+cond_weight: 2.0
+use_wandb: false
+
+# ── Predictor 评估器（大肠杆菌） ──────────────────────────────
+use_predictor_eval: true
+predictor_eval_type: "ecoli_lstm"
+ecoli_predictor_scaler_path: "/home/yt/Code/DNA-Diffusion/Predictor/results/model_EC/scaler_EC.pkl"
+ecoli_predictor_model_path: "/home/yt/Code/DNA-Diffusion/Predictor/results/model_EC/LSTMModel_EC_best.pth"
+ecoli_predictor_data_path: "/home/yt/Code/DNA-Diffusion/Data/ecoli_test_3000.csv"
+ecoli_predictor_hidden_size: 256
+ecoli_predictor_dropout_rate: 0.2
+ecoli_predictor_lambda_l2: 0.001
+ecoli_predictor_batch_size: 256
+
+eval_bin_edges_pkl_path: "/home/yt/Code/DNA-Diffusion/processed_data/ecoli_diffusion_data_gc_lx.pkl"

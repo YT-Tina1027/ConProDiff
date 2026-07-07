@@ -1,0 +1,7 @@
+checkpoint_path: "/home/yt/Code/DNA-Diffusion/result/checkpoints_ecoli_gclx/best_eval_epoch229_step42090_score_0.503736.pt"
+
+sample_batch_size: 10
+number_of_samples: 1000
+guidance_scale: 3.0
+
+output_dir: "/home/yt/Code/DNA-Diffusion/result/ecoli_gclx"

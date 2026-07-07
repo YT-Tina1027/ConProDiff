@@ -1,0 +1,7 @@
+defaults:
+  - data: yeast        # 切换物种只改这一行 → ecoli
+  - model: unet
+  - diffusion: default
+  - optimizer: adam
+  - training: yeast     # 切换物种只改这一行 → ecoli
+  - _self_

@@ -1,0 +1,1 @@
+Epoch: 0 | Train Loss: 6.6811 | Val Loss: 6.2390 | Train Pearson: 0.5734 | Val Pearson: 0.6378 | Train MSE: 0.6696 | Val MSE: 0.6112

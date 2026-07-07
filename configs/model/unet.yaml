@@ -1,0 +1,13 @@
+_target_: dnadiffusion.models.unet.UNet
+
+dim: 64
+init_dim: 64
+channels: 4
+dim_mults: [1, 2, 4]
+resnet_block_groups: 4
+
+# num_classes = num_bins + 1
+# 0 = unconditional，1/2/3 = low/mid/high
+num_classes: 4
+
+use_gc_condition: true  # 与 data.use_gc_condition 保持一致

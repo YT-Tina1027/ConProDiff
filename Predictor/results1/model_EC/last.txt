@@ -1,0 +1,8 @@
+==================================================
+[*] Loading Best Model for Final Evaluation...
+FINAL REPORT (EC):
+   Pearson (r) : 0.7839
+   Spearman (ρ): 0.7877
+   MSE         : 0.4038
+==================================================
+Total Time: 258.16 seconds

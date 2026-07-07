@@ -1,0 +1,57 @@
+1、yeast motifs下载：177个匹配上176个
+JASPAR2026 数据库中下载的
+curl "https://jaspar.elixir.no/api/v1/matrix/?tax_id=4932&format=meme&version=latest&page_size=500&collection=CORE" \
+  -o /home/yt/Code/DNA-Diffusion/lunwen/JASPAR2026_Scerevisiae_CORE.meme
+# 验证数量
+grep -c "^MOTIF" /home/yt/Code/DNA-Diffusion/lunwen/JASPAR2026_Scerevisiae_CORE.meme
+
+为评估生成序列中转录因子（TF）结合位点的富集情况，我们使用FIMO（v5.x）对生成序列进行了motif扫描分析。
+酿酒酵母（Saccharomyces cerevisiae）的转录因子motif数据集来源于JASPAR2026数据库CORE系列（税号4932，共177个位置权重矩阵，PWM），
+通过JASPAR REST API获取（https://jaspar.elixir.no）。扫描时对正反两条链均进行搜索，背景核苷酸频率设为均匀分布（A=C=G=T=0.25），
+伪计数为0.1，p值阈值为0.001。对于每个转录因子，计算生成序列中至少包含一个显著结合位点的序列比例。
+
+在177个酵母TF motif中，176个（99.4%）在生成序列中至少被检测到一次，表明模型生成的序列具有广泛的转录因子结合位点覆盖。
+不同表达条件下各TF motif的命中比例存在系统性差异（图X），其中差异最显著的motif集中于……（填你top20的TF名），
+提示模型有效学习到了与表达调控相关的序列特征。
+
+
+2、ecoli motifs下载:97个匹配上60个
+MEME suite 数据库
+直接下载 MEME Suite 整包，里面的 PROKARYOTE/ 文件夹有现成的 .meme 格式，不用转换：SwissRegulon
+
+wget https://meme-suite.org/meme-software/Databases/motifs/motif_databases.12.23.tgz
+tar -xzf motif_databases.12.23.tgz
+# 用这个文件：
+# motif_databases/PROKARYOTE/collectf.meme
+解压：tar -xzf motif_databases.12.23.tgz
+
+为评估生成序列是否包含生物学相关的转录因子（TF）结合位点，我们使用 FIMO（v5.x）对生成序列进行了motif富集分析，
+参考数据库为从MEME Suite motif数据库（v12.23）获取的SwissRegulon大肠杆菌motif数据集（共97个位置权重矩阵，PWM）。
+扫描时对正反两条链均进行搜索，背景核苷酸频率设为均匀分布（A=C=G=T=0.25），伪计数为0.1，p值阈值为0.001。对于每个转录因子，
+计算生成序列中至少包含一个显著结合位点的序列比例。具有相同因子名称的不同PWM变体通过取命中序列的并集进行合并。
+
+在97个TF motif中，60个在至少一条生成序列中被检测到。绝大多数motif的序列命中比例随表达水平的升高而单调递增（图X），
+其中OmpR、Nac、DcuR和ArcA等motif在不同条件间的差异最为显著，表明模型学习到了与表达水平相关的调控序列特征。
+
+方法部分描述
+转录因子结合位点扫描工具介绍
+  本研究使用FIMO（Find Individual Motif Occurrences，v5.5.x）工具对生成序列进行转录因子结合位点扫描。
+FIMO是MEME Suite软件包中的核心组件，是目前计算生物学领域最广泛使用的序列motif扫描工具之一。
+
+扫描原理介绍
+  FIMO的核心算法基于位置权重矩阵（Position Weight Matrix，PWM）的对数似然比评分模型。具体而言，对于每个转录因子的PWM，
+  首先将其转换为对数似然比矩阵（log-odds matrix），即对矩阵中每个位置的碱基概率与背景频率的比值取对数：
+            s(b,i)=log2​P(b∣背景)P(b∣位置 i)​
+其中 b 为碱基类型，i为motif中的位置，背景频率设为均匀分布（P=0.25）。
+随后，FIMO以滑动窗口方式对每条待扫描序列逐位置计算匹配得分，窗口大小等于对应motif的宽度。每个窗口的总得分为各位置对数似然比之和：
+                S=i=1∑w​s(bi​,i)
+得分越高表示该序列片段与motif越相似。FIMO通过动态规划方法预先计算随机序列的得分分布，将每个窗口的观测得分转换为p值，
+即随机序列产生不低于该得分的概率。本研究将p值阈值设为0.001，即仅保留统计显著的匹配结果。此外，扫描过程对正反两条链均进行检索，
+任意一条链上存在显著匹配即认为该序列包含对应转录因子的结合位点。
+对于每个转录因子，最终统计指标为生成序列中至少包含一个显著结合位点的序列比例（命中率），
+用以反映不同表达条件下生成序列对各转录因子结合位点的富集程度。
+
+引用文献
+方法部分末尾加上：
+Grant CE, Bailey TL, Noble WS. FIMO: scanning for occurrences of 
+a given motif. Bioinformatics, 2011, 27(7):1017-1018.
